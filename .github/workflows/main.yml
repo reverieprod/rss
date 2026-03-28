@@ -1,0 +1,31 @@
+name: Update Amazon RSS Feed
+
+on:
+  schedule:
+    - cron: '0 * * * *' # New: Every hour, on the hour
+  workflow_dispatch: # This creates a button for you to run it manually
+
+jobs:
+  update-feed:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write # This gives the robot permission to save the file
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Run feed remixer script
+        run: python feed_remixer.py
+
+      - name: Commit and push the new XML file
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add my_custom_feed.xml
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Auto-update RSS feed" && git push)
