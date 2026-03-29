@@ -2,9 +2,8 @@ import requests
 import sys
 import html
 
-# Adding &hd=true ensures the API prioritizes HD-capable rooms
+# Official API Configuration - Keeping the &hd=true for better images
 API_URL = "https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=uVv1N&client_ip=request_ip&format=json&limit=15&gender=f&hd=true"
-AFFILIATE_TEMPLATE = "https://chaturbate.com/in/?tour=YrCr&campaign=uVv1N&track=rss&room={username}"
 OUTPUT_FILE = "cb_trending_feed.xml"
 
 def generate_rss():
@@ -26,19 +25,21 @@ def generate_rss():
             name = html.escape(room.get('username', ''))
             subject = html.escape(room.get('room_subject', 'Live Now'))
             
-            # THE HACK: Grab the standard URL and try to remove the "small" suffix
-            # If the API gives us 'image_url', we strip the size tag to find the source
+            # --- THE CHANGE IS HERE ---
+            # Instead of building a link, we grab the specific RevShare URL
+            # We use .get() to avoid errors if the field is missing
+            revshare_url = room.get('chat_room_url_revshare', '')
+            safe_link = html.escape(revshare_url)
+            
+            # Upscale image hack (keeping this from our previous "win")
             raw_img = room.get('image_url', '')
             high_res_img = raw_img.replace('_360x270', '').replace('_450x338', '') 
             safe_thumb = html.escape(high_res_img)
             
-            raw_url = AFFILIATE_TEMPLATE.format(username=name)
-            affiliate_url = html.escape(raw_url)
-            
             rss_items += f"""
     <item>
       <title><![CDATA[{name} - {subject}]]></title>
-      <link>{affiliate_url}</link>
+      <link>{safe_link}</link>
       <description><![CDATA[{name} is live now.]]></description>
       <media:content url="{safe_thumb}" medium="image" />
     </item>"""
@@ -46,7 +47,7 @@ def generate_rss():
         rss_content = f"""<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0" xmlns:media="http://search.yahoo.com/mrss/">
   <channel>
-    <title>Trending CB Rooms (Max Res)</title>
+    <title>Trending CB Rooms (RevShare)</title>
     <link>https://chaturbate.com/</link>
     {rss_items}
   </channel>
@@ -54,7 +55,7 @@ def generate_rss():
 
         with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
             f.write(rss_content)
-        print("Success! Forced higher resolution snapshots.")
+        print("Success! RSS updated with RevShare links.")
 
     except Exception as e:
         print(f"Error: {e}")
