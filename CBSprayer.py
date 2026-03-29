@@ -3,7 +3,7 @@ import sys
 import html
 
 # Official API Configuration - Keeping the &hd=true for better images
-API_URL = "https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=uVv1N&client_ip=request_ip&format=json&limit=15&gender=f&hd=true"
+API_URL = "https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=uVv1N&client_ip=request_ip&format=json&limit=15&gender=f&hd=true&offset=5"
 OUTPUT_FILE = "cb_trending_feed.xml"
 
 def generate_rss():
