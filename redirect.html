@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Redirecting...</title>
+    <script>
+        // This script grabs the 'url' from the link and sends the user there
+        window.onload = function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const target = urlParams.get('target');
+            if (target) {
+                // We use 'replace' so the 'back' button doesn't get stuck
+                window.location.replace(decodeURIComponent(target));
+            } else {
+                window.location.replace("https://www.amazon.com");
+            }
+        }
+    </script>
+</head>
+<body>
+    <p>Loading your deal...</p>
+</body>
+</html>
