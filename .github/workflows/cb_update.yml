@@ -25,9 +25,11 @@ jobs:
       - name: Run Scraper
         run: python CBSprayer.py
 
-      - name: Commit and Push
+- name: Commit and Push
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           git add cb_trending_feed.xml
-          git diff --quiet && git diff --staged --quiet || (git commit -m "Update CB feed" && git push)
+          git diff --quiet && git diff --staged --quiet || (git commit -m "Update CB feed" && git remote set-url origin https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} && git push)
