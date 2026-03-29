@@ -49,7 +49,7 @@ def generate_rss():
     <item>
       <title><![CDATA[{clean_name} - {subject}]]></title>
       <link>{masked_link}</link>
-      <description><![CDATA[{clean_name} is live now.]]></description>
+      <description><![CDATA[{clean_name}]]></description>
       <media:content url="{safe_thumb}" medium="image" />
     </item>"""
 
