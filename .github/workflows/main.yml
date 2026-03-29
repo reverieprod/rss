@@ -2,7 +2,7 @@ name: Update Amazon RSS Feed
 
 on:
   schedule:
-    - cron: '5-55/10 * * * *' # New: Every hour, on the hour
+    - cron: '33 * * * *' # New: Every hour, on the hour
   workflow_dispatch: # This creates a button for you to run it manually
 
 jobs:
