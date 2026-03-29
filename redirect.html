@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Redirecting to Deal...</title>
+    <title>Redirecting...</title>
     <style>body { font-family: sans-serif; text-align: center; padding-top: 50px; }</style>
     <script>
         window.onload = function() {
             const urlParams = new URLSearchParams(window.location.search);
             const target = urlParams.get('target');
             if (target) {
-                // Decode and jump to Amazon
                 setTimeout(() => {
                     window.location.replace(decodeURIComponent(target));
                 }, 500); 
             } else {
-                window.location.replace("https://www.amazon.com");
+                // Fail-safe: if no target is found, go to your main site or Google
+                window.location.replace("https://google.com");
             }
         }
     </script>
 </head>
 <body>
-    <h2>🚀 Preparing your deal...</h2>
-    <p>Connecting you to the Amazon Marketplace.</p>
+    <h2>🚀 Preparing your link...</h2>
+    <p>This stops Twitter (X) from blocking good links! Thank you!</p>
 </body>
 </html>
