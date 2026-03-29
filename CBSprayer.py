@@ -5,7 +5,7 @@ import urllib.parse
 
 # --- CONFIGURATION ---
 # Using your hardcoded offset of 5
-API_URL = "https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=uVv1N&client_ip=request_ip&format=json&limit=10&gender=f&hd=true&offset=12"
+API_URL = "https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=uVv1N&client_ip=request_ip&format=json&limit=4&gender=f&hd=true&offset=4"
 # Your specific preconfigured URL template
 AFFILIATE_TEMPLATE = "https://chaturbate.com/in/?tour=YrCr&campaign=uVv1N&track=rss&room={username}"
 # Your Bridge Page
