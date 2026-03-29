@@ -1,6 +1,7 @@
-import requests
+import cloudscraper
 from bs4 import BeautifulSoup
 import re
+import sys
 
 # Your Configuration
 TARGET_URL = "https://chaturbate.com/teen-cams/female/"
@@ -9,27 +10,36 @@ OUTPUT_FILE = "cb_trending_feed.xml"
 LIMIT = 15
 
 def generate_rss():
-    headers = {
-        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36"
-    }
+    # We use cloudscraper instead of requests to bypass 403/Cloudflare
+    scraper = cloudscraper.create_scraper(
+        browser={
+            'browser': 'chrome',
+            'platform': 'windows',
+            'desktop': True
+        }
+    )
 
     try:
-        response = requests.get(TARGET_URL, headers=headers, timeout=15)
+        print(f"Attempting to scrape {TARGET_URL}...")
+        response = scraper.get(TARGET_URL, timeout=15)
+        
+        # Check if we got through
+        if response.status_code == 403:
+            print("CRITICAL ERROR: Still getting 403. The site is blocking GitHub's IP range.")
+            sys.exit(1)
+            
         response.raise_for_status()
         soup = BeautifulSoup(response.text, 'html.parser')
 
-        # Find all room links. They usually look like /username/
-        # We look for <a> tags where the href starts with / and ends with /
+        # Logic to find room links
         links = soup.find_all('a', href=re.compile(r'^/[a-zA-Z0-9_-]+/$'))
         
-        # Blacklist of common non-username paths on the site
         blacklist = {'/female-cams/', '/male-cams/', '/trans-cams/', '/couple-cams/', '/tags/', '/auth/', '/terms/', '/privacy/', '/help/'}
         
         usernames = []
         for link in links:
             href = link.get('href')
             if href not in blacklist:
-                # Clean the username (remove slashes)
                 name = href.strip('/')
                 if name not in usernames:
                     usernames.append(name)
@@ -37,7 +47,11 @@ def generate_rss():
             if len(usernames) >= LIMIT:
                 break
 
-        # Build the RSS structure
+        if not usernames:
+            print("ERROR: Found 0 usernames. The site layout might have changed.")
+            sys.exit(1)
+
+        # Build RSS
         rss_items = ""
         for name in usernames:
             affiliate_url = AFFILIATE_TEMPLATE.format(username=name)
@@ -63,7 +77,8 @@ def generate_rss():
         print(f"Successfully generated {OUTPUT_FILE} with {len(usernames)} items.")
 
     except Exception as e:
-        print(f"Error occurred: {e}")
+        print(f"CRITICAL ERROR: {e}")
+        sys.exit(1)
 
 if __name__ == "__main__":
     generate_rss()
