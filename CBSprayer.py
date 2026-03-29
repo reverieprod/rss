@@ -1,14 +1,13 @@
 import requests
 import sys
+import html  # This is the "Soap" that cleans the text
 
 # Official API Configuration
-# We use your affiliate ID (wm=uVv1N) and limit to 15 female rooms
 API_URL = "https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=uVv1N&client_ip=request_ip&format=json&limit=15&gender=f"
 AFFILIATE_TEMPLATE = "https://chaturbate.com/in/?tour=YrCr&campaign=uVv1N&track=rss&room={username}"
 OUTPUT_FILE = "cb_trending_feed.xml"
 
 def generate_rss():
-    # A standard browser header to keep things smooth
     headers = {
         "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
     }
@@ -19,22 +18,24 @@ def generate_rss():
         
         if response.status_code != 200:
             print(f"API Error: Status {response.status_code}")
-            print(f"Response: {response.text}")
             sys.exit(1)
 
         data = response.json()
         rooms = data.get('results', [])
 
         if not rooms:
-            print("API returned 0 results. Check if the 'wm' ID is active.")
+            print("API returned 0 results.")
             sys.exit(1)
 
-        # Build the RSS items
         rss_items = ""
         for room in rooms:
-            name = room.get('username')
-            subject = room.get('room_subject', 'Live Now')
-            affiliate_url = AFFILIATE_TEMPLATE.format(username=name)
+            # We "escape" the username and subject to fix the XML error
+            name = html.escape(room.get('username', ''))
+            subject = html.escape(room.get('room_subject', 'Live Now'))
+            
+            # Affiliate links often have & symbols too, so we clean the whole URL
+            raw_url = AFFILIATE_TEMPLATE.format(username=name)
+            affiliate_url = html.escape(raw_url)
             
             rss_items += f"""
     <item>
@@ -43,8 +44,7 @@ def generate_rss():
       <description>{name} is live on Chaturbate.</description>
     </item>"""
 
-        # Wrap it in the RSS shell
-        rss_content = f"""<?xml version='1.0' encoding='utf-8'?>
+        rss_content = f"""<?xml version="1.0" encoding="utf-8"?>
 <rss version="2.0">
   <channel>
     <title>Trending CB Rooms</title>
@@ -57,13 +57,11 @@ def generate_rss():
         with open(OUTPUT_FILE, "w", encoding="utf-8") as f:
             f.write(rss_content)
             
-        print(f"Success! {OUTPUT_FILE} created with {len(rooms)} items.")
+        print(f"Success! {OUTPUT_FILE} created and sanitized.")
 
     except Exception as e:
         print(f"CRITICAL ERROR: {e}")
         sys.exit(1)
 
-# This is the line where the error happened previously. 
-# It must be on its own line at the very bottom.
 if __name__ == "__main__":
     generate_rss()
