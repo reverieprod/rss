@@ -7,7 +7,7 @@ import urllib.parse
 # Using your hardcoded offset of 5
 API_URL = "https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=uVv1N&client_ip=request_ip&format=json&limit=4&gender=f&hd=true&offset=4"
 # Your specific preconfigured URL template
-AFFILIATE_TEMPLATE = "https://chaturbate.com/in/?tour=YrCr&campaign=uVv1N&track=rss&room={username}"
+AFFILIATE_TEMPLATE = "https://chaturbate.com/in/?tour=APi5&campaign=uVv1N&track=rss&room={username}"
 # Your Bridge Page
 BRIDGE_BASE = "https://remyrev.github.io/remyrsspullerVGMS/redirect.html"
 OUTPUT_FILE = "cb_trending_feed.xml"
