@@ -8,7 +8,7 @@ import html
 # --- CONFIGURATION ---
 TARGET_URL = "https://www.amazon.com/gp/movers-and-shakers/videogames/"
 AFFILIATE_TAG = "saintrem-20"
-BRIDGE_BASE = "https://remyrev.github.io/remyrsspullerVGMS/redirect.html"
+BRIDGE_BASE = "https://reverieprod.github.io/rss/redirect.html"
 OUTPUT_FILE = "my_custom_feed.xml"
 
 def generate_amazon_feed():
