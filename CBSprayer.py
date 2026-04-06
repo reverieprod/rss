@@ -9,7 +9,7 @@ API_URL = "https://chaturbate.com/api/public/affiliates/onlinerooms/?wm=uVv1N&cl
 # Your specific preconfigured URL template
 AFFILIATE_TEMPLATE = "https://chaturbate.com/in/?tour=APi5&campaign=uVv1N&track=rss&room={username}"
 # Your Bridge Page
-BRIDGE_BASE = "https://remyrev.github.io/remyrsspullerVGMS/redirect.html"
+BRIDGE_BASE = "https://reverieprod.github.io/rss/redirect.html"
 OUTPUT_FILE = "cb_trending_feed.xml"
 
 def generate_rss():
