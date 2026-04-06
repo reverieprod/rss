@@ -16,11 +16,11 @@ OUTPUT_FILE = "my_custom_feed.xml"
 # The script will randomly pick one of these for each item
 HYPE_PHRASES = [
     "Climbing the charts in Video Games today! Check out this trending deal now",
-    "Gamers are grabbing this fast. See why it's a top mover on Amazon right now.",
-    "Current standout in the gaming category. Catch the trend!",
-    "Level up your collection with this trending mover & shaker.",
-    "This one is flying up the ranks today. Don't miss out on the hype.",
-    "Spotted on the Movers & Shakers list. Worth a look if you need something new to play.",
+    "Now Rising on the Trending Charts",
+    "Current standout in the gaming category. Catch it quick!",
+    "Level up your collection today!",
+    "This one is flying up the ranks today. Don't miss out on the hype!",
+    "Don't miss the top trending items!",
     "A major trend alert in the gaming section today. Check it out!"
 ]
 
