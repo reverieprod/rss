@@ -2,7 +2,7 @@ name: Update CB Trending Feed
 
 on:
   schedule:
-    - cron: '*/10 * * * *' # Runs every hour at the 30-minute mark
+    - cron: '*/29 * * * *' 
   workflow_dispatch:     # Allows you to run it manually
 
 jobs:
